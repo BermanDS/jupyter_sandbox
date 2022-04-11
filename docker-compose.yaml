@@ -1,0 +1,26 @@
+version: '3'
+services:
+    jupyter:
+      env_file:
+        - .env
+      volumes:
+        - ${LOCAL_WORKING_DIR}:/home/jovyan/work
+        - ${LOCAL_DATASETS}:/home/jovyan/work/data
+      build: .
+      container_name: spark_sandbox
+      #image: jupyter/minimal-notebook # always get `latest` image on docker hub
+      ports:
+        - ${NOTEBOOK_PORT}:${NOTEBOOK_PORT}
+        - ${GUI_PORT}:${GUI_PORT}
+      restart: unless-stopped
+      environment:
+          PASSWORD: 'PySpark992022'
+          NB_UID: 1000
+          JUPYTER_ENABLE_LAB: 'yes'
+          GRANT_SUDO: 'yes'
+          SPARK_MASTER_URL: spark://spark:7777
+      command: >
+          sh -c "bash start-notebook.sh\
+                --NotebookApp.token=$ACCESS_TOKEN\
+                --NotebookApp.notebook_dir=/home/jovyan/work/\
+                --port $NOTEBOOK_PORT"
