@@ -3,10 +3,21 @@ services:
     jupyter:
       env_file:
         - .env
+      logging:
+        options:
+          max-size: $LOGSIZE  
       volumes:
         - ${LOCAL_WORKING_DIR}:/home/jovyan/work
         - ${LOCAL_DATASETS}:/home/jovyan/work/data
       build: .
+      deploy:
+        resources:
+          limits:
+            cpus: "0.90"
+            memory: "12000M"
+          reservations:
+            cpus: "0.10"
+            memory: "1024M"
       container_name: spark_sandbox
       #image: jupyter/minimal-notebook # always get `latest` image on docker hub
       ports:
@@ -21,6 +32,6 @@ services:
           SPARK_MASTER_URL: spark://spark:7777
       command: >
           sh -c "bash start-notebook.sh\
-                --NotebookApp.token=$ACCESS_TOKEN\
-                --NotebookApp.notebook_dir=/home/jovyan/work/\
-                --port $NOTEBOOK_PORT"
+                --NotebookApp.token=$ACCESS_TOKEN \
+                --NotebookApp.notebook_dir=/home/jovyan/work/ \
+                --NotebookApp.port=$NOTEBOOK_PORT"
