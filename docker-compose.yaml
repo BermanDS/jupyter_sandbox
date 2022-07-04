@@ -25,7 +25,7 @@ services:
         - ${GUI_PORT}:${GUI_PORT}
       restart: unless-stopped
       environment:
-          PASSWORD: 'PySpark992022'
+          PASSWORD: '123456789'
           NB_UID: 1000
           JUPYTER_ENABLE_LAB: 'yes'
           GRANT_SUDO: 'yes'
